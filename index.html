@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Snehal Mastud — Backend Engineer</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Fraunces:ital,wght@0,300;0,700;1,300&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <!-- Cursor -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-follower" id="cursor-follower"></div>
+
+  <!-- Nav -->
+  <nav class="nav" id="nav">
+    <div class="nav-logo">SM<span class="dot">.</span></div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="chat-nav-btn" onclick="openChat()">💬 Ask Me</button>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero" id="hero">
+    <div class="hero-bg">
+      <div class="grid-overlay"></div>
+      <div class="glow glow-1"></div>
+      <div class="glow glow-2"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-tag reveal">Available for opportunities</div>
+      <h1 class="hero-title reveal">
+        <span class="line">Snehal</span>
+        <span class="line accent">Mastud</span>
+      </h1>
+      <p class="hero-role reveal"><span class="mono">{ </span>Node.js Backend Engineer · Full-Stack MEAN/MERN<span class="mono"> }</span></p>
+      <p class="hero-sub reveal">5+ years crafting scalable backend systems in fintech, aviation, healthcare & e-commerce. Based in Mumbai.</p>
+      <div class="hero-cta reveal">
+        <a href="#projects" class="btn-primary">View Work</a>
+        <a href="#contact" class="btn-outline">Get in Touch</a>
+      </div>
+    </div>
+    <div class="hero-stats reveal">
+      <div class="stat"><span class="stat-num" data-target="5">0</span><span>+</span><p>Years Exp.</p></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><span class="stat-num" data-target="6">0</span><span>+</span><p>Projects</p></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><span class="stat-num" data-target="15">0</span><span>+</span><p>Integrations</p></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><span class="stat-num" data-target="70">0</span><span>%</span><p>API Speed Boost</p></div>
+    </div>
+    <div class="scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="about section" id="about">
+    <div class="container">
+      <div class="section-label reveal">01 — About</div>
+      <div class="about-grid">
+        <div class="about-text reveal">
+          <h2 class="section-title">Building the backend <em>backbone</em> of modern platforms.</h2>
+          <p>Results-driven Senior Backend Engineer with 5+ years delivering scalable, secure, and high-performance solutions across <strong>banking, aviation, healthcare, and e-commerce</strong> domains.</p>
+          <p>Expert in Node.js, MEAN/MERN stacks, microservices architecture, and cloud-native development using <strong>AWS and Kubernetes</strong>. Adept at full-stack development with Angular and Next.js.</p>
+          <p>Committed to clean architecture, automation, and continuous improvement — always chasing that next 10x performance gain.</p>
+          <div class="about-badges">
+            <span class="badge">Mumbai, India</span>
+            <span class="badge">Open to Remote</span>
+            <span class="badge">Senior Level</span>
+          </div>
+        </div>
+        <div class="about-visual reveal">
+          <div class="terminal">
+            <div class="terminal-header">
+              <span class="t-btn red"></span>
+              <span class="t-btn yellow"></span>
+              <span class="t-btn green"></span>
+              <span class="t-title">snehal.config.js</span>
+            </div>
+            <div class="terminal-body">
+              <pre id="terminal-text"></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section class="skills section" id="skills">
+    <div class="container">
+      <div class="section-label reveal">02 — Skills</div>
+      <h2 class="section-title reveal">Tech <em>Arsenal</em></h2>
+      <div class="skills-grid">
+        <div class="skill-card reveal" data-delay="0">
+          <div class="skill-icon">⚙️</div>
+          <h3>Backend</h3>
+          <div class="skill-tags">
+            <span>Node.js</span><span>Express.js</span><span>JavaScript</span><span>REST APIs</span><span>Microservices</span><span>JWT</span>
+          </div>
+          <div class="skill-bar"><div class="skill-fill" data-width="95"></div></div>
+        </div>
+        <div class="skill-card reveal" data-delay="100">
+          <div class="skill-icon">🎨</div>
+          <h3>Frontend</h3>
+          <div class="skill-tags">
+            <span>React.js</span><span>Angular</span><span>Next.js</span><span>TypeScript</span><span>HTML/CSS</span>
+          </div>
+          <div class="skill-bar"><div class="skill-fill" data-width="85"></div></div>
+        </div>
+        <div class="skill-card reveal" data-delay="200">
+          <div class="skill-icon">🗄️</div>
+          <h3>Databases</h3>
+          <div class="skill-tags">
+            <span>MongoDB</span><span>MySQL</span><span>Redis</span><span>SQL Server</span><span>Indexing</span>
+          </div>
+          <div class="skill-bar"><div class="skill-fill" data-width="90"></div></div>
+        </div>
+        <div class="skill-card reveal" data-delay="300">
+          <div class="skill-icon">☁️</div>
+          <h3>Cloud & DevOps</h3>
+          <div class="skill-tags">
+            <span>AWS EC2/S3/Lambda</span><span>GCP</span><span>Docker</span><span>Kubernetes</span><span>Jenkins</span><span>CI/CD</span>
+          </div>
+          <div class="skill-bar"><div class="skill-fill" data-width="80"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section class="projects section" id="projects">
+    <div class="container">
+      <div class="section-label reveal">03 — Projects</div>
+      <h2 class="section-title reveal">Featured <em>Work</em></h2>
+      <div class="projects-list">
+
+        <div class="project-card reveal" data-delay="0">
+          <div class="project-num">01</div>
+          <div class="project-content">
+            <div class="project-header">
+              <h3>Axis GrabDeals</h3>
+              <span class="project-domain">Fintech · Loyalty</span>
+            </div>
+            <p>Architected and led backend development for Axis Bank's high-traffic loyalty platform. Integrated 10+ third-party APIs including Flipkart, Amazon, and Puma — dramatically improving system reliability and scalability.</p>
+            <div class="project-tech"><span>Angular</span><span>Node.js</span><span>Express.js</span><span>MySQL</span></div>
+            <div class="project-highlight">🏦 10+ Third-party Integrations</div>
+          </div>
+        </div>
+
+        <div class="project-card reveal" data-delay="100">
+          <div class="project-num">02</div>
+          <div class="project-content">
+            <div class="project-header">
+              <h3>My Way Miles Platform</h3>
+              <span class="project-domain">Aviation · Exchange</span>
+            </div>
+            <p>Co-led development of a first-of-its-kind air miles exchange platform. Integrated 15+ airline partners including Qatar Airways, Saudia, and Ascenda. Reduced software downtime by ~67%.</p>
+            <div class="project-tech"><span>Angular</span><span>Node.js</span><span>Express.js</span><span>MongoDB</span></div>
+            <div class="project-highlight">✈️ 67% Downtime Reduction · 15+ Airlines</div>
+          </div>
+        </div>
+
+        <div class="project-card reveal" data-delay="200">
+          <div class="project-num">03</div>
+          <div class="project-content">
+            <div class="project-header">
+              <h3>Reporting Microservices</h3>
+              <span class="project-domain">Performance · Architecture</span>
+            </div>
+            <p>Designed and deployed 8 microservices for data reporting. Achieved 30–70% API runtime reduction through MySQL indexing and deep performance tuning.</p>
+            <div class="project-tech"><span>Node.js</span><span>Express.js</span><span>MySQL</span><span>Angular</span></div>
+            <div class="project-highlight">⚡ 30–70% Faster API Response</div>
+          </div>
+        </div>
+
+        <div class="project-card reveal" data-delay="0">
+          <div class="project-num">04</div>
+          <div class="project-content">
+            <div class="project-header">
+              <h3>Travel Platform</h3>
+              <span class="project-domain">Travel · APIs</span>
+            </div>
+            <p>Designed and developed backend APIs and frontend for travel platforms (Bluesky & MakeMyTrip). Integrated APIs for Flights, Hotels, and Holiday Packages.</p>
+            <div class="project-tech"><span>Angular</span><span>Node.js</span><span>MySQL</span><span>EJS</span></div>
+            <div class="project-highlight">🌍 Flights · Hotels · Holiday Packages</div>
+          </div>
+        </div>
+
+        <div class="project-card reveal" data-delay="100">
+          <div class="project-num">05</div>
+          <div class="project-content">
+            <div class="project-header">
+              <h3>Corefit Platform</h3>
+              <span class="project-domain">Healthcare · Streaming</span>
+            </div>
+            <p>Built a real-time streaming platform supporting live messaging and video conferencing through external API integrations for fitness and wellness use cases.</p>
+            <div class="project-tech"><span>Angular</span><span>Node.js</span><span>Express.js</span><span>MySQL</span></div>
+            <div class="project-highlight">🎥 Live Streaming & Messaging</div>
+          </div>
+        </div>
+
+        <div class="project-card reveal" data-delay="200">
+          <div class="project-num">06</div>
+          <div class="project-content">
+            <div class="project-header">
+              <h3>Club by IIFA App</h3>
+              <span class="project-domain">Entertainment · Engagement</span>
+            </div>
+            <p>Directed backend team for a celebrity fan engagement app from architecture to launch. Currently leading backend for the IIFA Affiliate platform.</p>
+            <div class="project-tech"><span>Node.js</span><span>MongoDB</span></div>
+            <div class="project-highlight">🌟 Fan Engagement · Affiliate Platform</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Experience -->
+  <section class="experience section" id="experience">
+    <div class="container">
+      <div class="section-label reveal">04 — Experience</div>
+      <h2 class="section-title reveal">Career <em>Timeline</em></h2>
+      <div class="timeline">
+        <div class="timeline-item reveal">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="timeline-date">2020 — Present</div>
+            <h3>Software Engineer</h3>
+            <h4>Vernost Tech Ventures Pvt. Ltd.</h4>
+            <p>Mumbai, India · 5+ Years</p>
+            <p>Led backend architecture for high-traffic platforms in fintech, travel, and loyalty domains. Managed teams, designed microservices, integrated 15+ partners, and consistently delivered high-performance systems.</p>
+          </div>
+        </div>
+        <div class="timeline-item reveal">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="timeline-date">2016 — 2020</div>
+            <h3>BE — Computer Engineering</h3>
+            <h4>SMT. Indira Gandhi College of Engineering</h4>
+            <p>Navi Mumbai</p>
+            <p>Completed Bachelor's in Computer Engineering, building the foundational knowledge in software systems, data structures, and architecture that drives my work today.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="contact section" id="contact">
+    <div class="container">
+      <div class="section-label reveal">05 — Contact</div>
+      <div class="contact-grid">
+        <div class="contact-left reveal">
+          <h2 class="section-title">Let's build something <em>great</em>.</h2>
+          <p>I'm currently open to new opportunities. Whether you have a project, a team, or just want to connect — my inbox is open.</p>
+          <div class="contact-links">
+            <a href="mailto:smastud0@gmail.com" class="contact-item">
+              <span class="contact-icon">📧</span>
+              <span>smastud0@gmail.com</span>
+            </a>
+            <a href="tel:+919819439377" class="contact-item">
+              <span class="contact-icon">📞</span>
+              <span>+91 98194 39377</span>
+            </a>
+            <a href="#" class="contact-item">
+              <span class="contact-icon">💼</span>
+              <span>LinkedIn Profile</span>
+            </a>
+          </div>
+        </div>
+        <div class="contact-right reveal">
+          <div class="contact-card">
+            <p class="contact-card-title">Quick Chat with my AI</p>
+            <p>Want to know more about my skills, projects, or availability? Ask my AI assistant directly.</p>
+            <button class="btn-primary" onclick="openChat()">💬 Open AI Chat</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <span>© 2026 Snehal Mastud</span>
+      <span class="footer-divider">·</span>
+      <span>Mumbai, India</span>
+      <span class="footer-divider">·</span>
+      <span>Built with passion</span>
+    </div>
+  </footer>
+
+  <!-- CHATBOT -->
+  <div class="chat-bubble" id="chatBubble" onclick="openChat()">
+    <span class="chat-bubble-icon">💬</span>
+    <span class="chat-bubble-label">Ask about Snehal</span>
+  </div>
+
+  <div class="chat-overlay" id="chatOverlay" onclick="closeChat()"></div>
+
+  <div class="chat-panel" id="chatPanel">
+    <div class="chat-header">
+      <div class="chat-avatar">SM</div>
+      <div class="chat-header-info">
+        <strong>Snehal's AI Assistant</strong>
+        <span class="online-dot"></span> Online
+      </div>
+      <button class="chat-close" onclick="closeChat()">✕</button>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="chat-msg bot">
+        <div class="msg-bubble">👋 Hi! I'm Snehal's AI assistant. Ask me anything about his skills, projects, experience, or availability!</div>
+      </div>
+      <div class="chat-suggestions">
+        <button onclick="askSuggestion(this)">What tech does he use?</button>
+        <button onclick="askSuggestion(this)">Tell me about his projects</button>
+        <button onclick="askSuggestion(this)">Is he available to hire?</button>
+        <button onclick="askSuggestion(this)">What's his backend expertise?</button>
+      </div>
+    </div>
+    <div class="chat-input-row">
+      <input type="text" id="chatInput" placeholder="Ask anything about Snehal..." onkeydown="if(event.key==='Enter') sendMessage()" />
+      <button onclick="sendMessage()" id="sendBtn">➤</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
