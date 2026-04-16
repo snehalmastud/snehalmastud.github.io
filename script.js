@@ -71,7 +71,7 @@ counters.forEach(el => counterObs.observe(el));
 // ---- TERMINAL TYPING EFFECT ----
 const terminalCode = `const engineer = {
   name: "Snehal Mastud",
-  role: "Senior Backend Engineer",
+  role: "Full-Stack Engineer · AI Practitioner · MEAN/MERN Stack",
   location: "Mumbai, India 🇮🇳",
   experience: "5+ years",
 

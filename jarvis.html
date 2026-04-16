@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Snehal's Jarvis — AI Assistant</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    :root {
+      --bg: #04080f;
+      --bg2: #070d1a;
+      --card: #0b1424;
+      --accent: #c9956a;
+      --accent2: #a8748a;
+      --blue: #3b9eff;
+      --blue2: #1a6fc4;
+      --text: #dde8f5;
+      --text-muted: #6a8aaa;
+      --text-dim: #2a3a4a;
+      --border: rgba(59,158,255,0.15);
+      --border-bright: rgba(59,158,255,0.35);
+      --glow-blue: 0 0 20px rgba(59,158,255,0.25);
+      --glow-amber: 0 0 20px rgba(201,149,106,0.2);
+      --mono: 'DM Mono', monospace;
+      --display: 'Syne', sans-serif;
+    }
+
+    html, body { height:100%; overflow:hidden; }
+
+    body {
+      background: var(--bg);
+      font-family: var(--mono);
+      color: var(--text);
+      display: flex; flex-direction: column;
+      position: relative;
+    }
+
+    /* ── BACKGROUND GRID + GLOW ── */
+    .bg-layer {
+      position: fixed; inset:0; z-index:0; pointer-events:none;
+      background-image:
+        linear-gradient(rgba(59,158,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(59,158,255,0.025) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .bg-glow {
+      position: fixed; border-radius:50%; filter:blur(120px);
+      pointer-events:none; z-index:0;
+    }
+    .bg-glow-1 { width:500px; height:500px; background: rgba(59,158,255,0.07); top:-150px; right:-100px; }
+    .bg-glow-2 { width:400px; height:400px; background: rgba(201,149,106,0.06); bottom:-100px; left:-80px; }
+
+    /* ── HEADER ── */
+    .jarvis-header {
+      position: relative; z-index:10;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      background: rgba(4,8,15,0.9);
+      backdrop-filter: blur(12px);
+      flex-shrink: 0;
+    }
+    .jarvis-brand {
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .jarvis-orb {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #5bbaff, var(--blue2));
+      box-shadow: 0 0 0 3px rgba(59,158,255,0.15), var(--glow-blue);
+      flex-shrink:0; position:relative;
+      animation: orbPulse 3s ease-in-out infinite;
+    }
+    .jarvis-orb::after {
+      content:''; position:absolute; inset:6px; border-radius:50%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.5), transparent);
+    }
+    @keyframes orbPulse {
+      0%,100% { box-shadow: 0 0 0 3px rgba(59,158,255,0.15), 0 0 20px rgba(59,158,255,0.25); }
+      50% { box-shadow: 0 0 0 6px rgba(59,158,255,0.08), 0 0 40px rgba(59,158,255,0.4); }
+    }
+    .jarvis-brand-text { line-height:1.2; }
+    .jarvis-name { font-family: var(--display); font-weight:800; font-size:1rem; letter-spacing:0.02em; color:var(--text); }
+    .jarvis-sub { font-size:0.6rem; color:var(--text-muted); letter-spacing:0.15em; text-transform:uppercase; }
+
+    .jarvis-status {
+      display:flex; align-items:center; gap:0.5rem;
+      font-size:0.62rem; color:var(--text-muted); letter-spacing:0.1em;
+    }
+    .status-dot {
+      width:7px; height:7px; border-radius:50%; background:#28e07a;
+      animation: statusPulse 2s infinite;
+    }
+    @keyframes statusPulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+    .back-btn {
+      font-family: var(--mono); font-size:0.65rem; color:var(--text-muted);
+      background: var(--card); border: 1px solid var(--border);
+      border-radius:6px; padding:0.4rem 0.9rem; text-decoration:none;
+      transition: color 0.2s, border-color 0.2s;
+      letter-spacing:0.05em;
+    }
+    .back-btn:hover { color:var(--blue); border-color:var(--border-bright); }
+
+    /* ── SCAN LINE EFFECT ── */
+    .scan-line {
+      position: fixed; width:100%; height:2px;
+      background: linear-gradient(90deg, transparent, rgba(59,158,255,0.4), transparent);
+      animation: scan 8s linear infinite; z-index:1; pointer-events:none;
+    }
+    @keyframes scan { 0%{top:-2px} 100%{top:100vh} }
+
+    /* ── MESSAGES AREA ── */
+    .messages-area {
+      flex:1; overflow-y:auto; padding:1.5rem;
+      position:relative; z-index:5;
+      display:flex; flex-direction:column; gap:1rem;
+      scrollbar-width:thin; scrollbar-color: var(--border) transparent;
+    }
+    .messages-area::-webkit-scrollbar { width:4px; }
+    .messages-area::-webkit-scrollbar-track { background:transparent; }
+    .messages-area::-webkit-scrollbar-thumb { background: var(--border); border-radius:2px; }
+
+    /* ── WELCOME SCREEN ── */
+    .welcome {
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      flex:1; text-align:center; padding:2rem; gap:1.5rem;
+      animation: fadeIn 0.6s ease;
+    }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+    .welcome-orb-big {
+      width:90px; height:90px; border-radius:50%;
+      background: radial-gradient(circle at 35% 35%, #5bbaff, var(--blue2));
+      box-shadow: 0 0 0 8px rgba(59,158,255,0.08), 0 0 60px rgba(59,158,255,0.3);
+      position:relative; animation: orbPulse 3s ease-in-out infinite;
+    }
+    .welcome-orb-big::after {
+      content:''; position:absolute; inset:12px; border-radius:50%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.5), transparent);
+    }
+    .welcome-title { font-family:var(--display); font-size:1.6rem; font-weight:800; color:var(--text); }
+    .welcome-title span { color:var(--blue); }
+    .welcome-desc { font-size:0.78rem; color:var(--text-muted); line-height:1.7; max-width:320px; }
+
+    .welcome-chips { display:flex; flex-wrap:wrap; gap:0.6rem; justify-content:center; max-width:400px; }
+    .chip {
+      font-size:0.68rem; padding:0.45rem 1rem; border-radius:50px;
+      border:1px solid var(--border); color:var(--text-muted);
+      background:var(--card); cursor:pointer;
+      transition:all 0.2s; letter-spacing:0.03em;
+    }
+    .chip:hover { border-color:var(--border-bright); color:var(--blue); background:rgba(59,158,255,0.06); }
+
+    /* ── MESSAGES ── */
+    .msg-row { display:flex; gap:0.75rem; animation:fadeIn 0.3s ease; }
+    .msg-row.user { flex-direction:row-reverse; }
+
+    .msg-avatar {
+      width:32px; height:32px; border-radius:50%; flex-shrink:0;
+      display:flex; align-items:center; justify-content:center;
+      font-size:0.65rem; font-weight:700; letter-spacing:0.02em;
+    }
+    .msg-avatar.jarvis {
+      background: radial-gradient(circle at 35% 35%, #5bbaff, var(--blue2));
+      box-shadow: var(--glow-blue);
+      color:white;
+    }
+    .msg-avatar.user-av {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color:#000;
+    }
+
+    .msg-bubble {
+      max-width:80%; padding:0.85rem 1.1rem; border-radius:16px;
+      font-size:0.82rem; line-height:1.65; position:relative;
+    }
+    .msg-row.bot .msg-bubble {
+      background: var(--card);
+      border:1px solid var(--border);
+      border-top-left-radius:4px;
+      color:var(--text);
+    }
+    .msg-row.user .msg-bubble {
+      background: linear-gradient(135deg, var(--blue2), var(--blue));
+      border-top-right-radius:4px;
+      color:white;
+    }
+
+    /* Stream cursor */
+    .stream-cursor {
+      display:inline-block; width:2px; height:0.9em;
+      background:var(--blue); margin-left:2px; vertical-align:middle;
+      animation:blink 0.7s steps(1) infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    /* Typing dots */
+    .typing-dots { display:flex; gap:5px; padding:0.9rem 1.1rem; align-items:center;
+      background:var(--card); border:1px solid var(--border); border-radius:16px; border-top-left-radius:4px; width:fit-content; }
+    .typing-dot {
+      width:7px; height:7px; border-radius:50%; background:var(--text-muted);
+      animation:typeBounce 1.2s ease-in-out infinite;
+    }
+    .typing-dot:nth-child(2){animation-delay:0.2s}
+    .typing-dot:nth-child(3){animation-delay:0.4s}
+    @keyframes typeBounce { 0%,60%,100%{transform:translateY(0);opacity:0.4} 30%{transform:translateY(-8px);opacity:1} }
+
+    /* JARVIS watermark on bot messages */
+    .msg-meta {
+      font-size:0.55rem; color:var(--text-dim); letter-spacing:0.1em;
+      text-transform:uppercase; margin-top:0.4rem;
+    }
+
+    /* ── SUGGESTIONS after first bot reply ── */
+    .suggestion-row {
+      display:flex; flex-wrap:wrap; gap:0.5rem;
+      padding-left:calc(32px + 0.75rem);
+      animation:fadeIn 0.4s ease 0.3s both;
+    }
+    .sug-btn {
+      font-family:var(--mono); font-size:0.62rem;
+      background:transparent; border:1px solid var(--border);
+      color:var(--text-muted); border-radius:50px; padding:0.35rem 0.85rem;
+      cursor:pointer; transition:all 0.2s;
+    }
+    .sug-btn:hover { border-color:var(--border-bright); color:var(--blue); background:rgba(59,158,255,0.05); }
+
+    /* ── HUD METRICS BAR ── */
+    .hud-bar {
+      position:relative; z-index:10;
+      display:flex; gap:1.5rem; padding:0.6rem 1.5rem;
+      border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+      background:rgba(4,8,15,0.8);
+      overflow-x:auto; flex-shrink:0;
+    }
+    .hud-item { display:flex; flex-direction:column; gap:0.1rem; white-space:nowrap; }
+    .hud-label { font-size:0.52rem; color:var(--text-dim); letter-spacing:0.15em; text-transform:uppercase; }
+    .hud-val { font-size:0.72rem; color:var(--blue); font-weight:400; }
+    .hud-val.green { color:#28e07a; }
+    .hud-val.amber { color:var(--accent); }
+
+    /* ── INPUT AREA ── */
+    .input-area {
+      position:relative; z-index:10; flex-shrink:0;
+      padding:1rem 1.5rem 1.25rem;
+      background:rgba(4,8,15,0.95);
+      backdrop-filter:blur(12px);
+      border-top:1px solid var(--border);
+    }
+    .input-wrap {
+      display:flex; gap:0.75rem; align-items:center;
+      background:var(--card); border:1px solid var(--border);
+      border-radius:12px; padding:0.65rem 0.65rem 0.65rem 1.1rem;
+      transition:border-color 0.2s;
+    }
+    .input-wrap:focus-within { border-color:var(--border-bright); box-shadow:var(--glow-blue); }
+    .input-prefix { font-size:0.65rem; color:var(--blue); letter-spacing:0.05em; white-space:nowrap; }
+    #jarvisInput {
+      flex:1; background:transparent; border:none; outline:none;
+      font-family:var(--mono); font-size:0.82rem; color:var(--text);
+      caret-color:var(--blue);
+    }
+    #jarvisInput::placeholder { color:var(--text-dim); }
+    .send-btn {
+      width:36px; height:36px; border-radius:8px; flex-shrink:0;
+      background:var(--blue); border:none; cursor:pointer;
+      display:flex; align-items:center; justify-content:center;
+      transition:background 0.2s, transform 0.15s, box-shadow 0.2s;
+      color:white;
+    }
+    .send-btn:hover { background:#5bbaff; transform:scale(1.05); box-shadow:var(--glow-blue); }
+    .send-btn:disabled { background:var(--text-dim); cursor:not-allowed; transform:none; box-shadow:none; }
+    .send-btn svg { width:16px; height:16px; }
+
+    .input-hint { font-size:0.55rem; color:var(--text-dim); margin-top:0.5rem; text-align:center; letter-spacing:0.08em; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width:600px) {
+      .hud-bar { gap:1rem; padding:0.5rem 1rem; }
+      .messages-area { padding:1rem; }
+      .input-area { padding:0.75rem 1rem 1rem; }
+      .jarvis-header { padding:0.75rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-layer"></div>
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+  <div class="scan-line"></div>
+
+  <!-- Header -->
+  <header class="jarvis-header">
+    <div class="jarvis-brand">
+      <div class="jarvis-orb"></div>
+      <div class="jarvis-brand-text">
+        <div class="jarvis-name">Snehal's Jarvis</div>
+        <div class="jarvis-sub">AI Portfolio Assistant</div>
+      </div>
+    </div>
+    <div class="jarvis-status">
+      <div class="status-dot"></div>
+      SYSTEMS ONLINE
+    </div>
+    <a href="index.html" class="back-btn">← Portfolio</a>
+  </header>
+
+  <!-- HUD metrics bar -->
+  <div class="hud-bar">
+    <div class="hud-item"><div class="hud-label">Experience</div><div class="hud-val amber">5+ Years</div></div>
+    <div class="hud-item"><div class="hud-label">Stack</div><div class="hud-val">MEAN / MERN</div></div>
+    <div class="hud-item"><div class="hud-label">Location</div><div class="hud-val">Mumbai, IN</div></div>
+    <div class="hud-item"><div class="hud-label">AI Tools</div><div class="hud-val amber">5 Active</div></div>
+    <div class="hud-item"><div class="hud-label">Projects</div><div class="hud-val">6+</div></div>
+    <div class="hud-item"><div class="hud-label">Cert</div><div class="hud-val green">Agentic AI ✓</div></div>
+    <div class="hud-item"><div class="hud-label">Status</div><div class="hud-val green">Open to Work</div></div>
+  </div>
+
+  <!-- Messages -->
+  <div class="messages-area" id="messagesArea">
+    <!-- Welcome state -->
+    <div class="welcome" id="welcomeScreen">
+      <div class="welcome-orb-big"></div>
+      <div>
+        <div class="welcome-title">Hello, I'm <span>Jarvis</span></div>
+        <div class="welcome-title" style="font-size:1rem;color:var(--text-muted);font-weight:400;margin-top:0.25rem">Snehal's personal AI assistant</div>
+      </div>
+      <div class="welcome-desc">Ask me anything about Snehal — her skills, projects, experience, AI expertise, certifications, or how to reach her.</div>
+      <div class="welcome-chips" id="welcomeChips">
+        <div class="chip" onclick="fireChip(this)">What's her tech stack?</div>
+        <div class="chip" onclick="fireChip(this)">Tell me about her projects</div>
+        <div class="chip" onclick="fireChip(this)">What AI tools does she use?</div>
+        <div class="chip" onclick="fireChip(this)">Is she open to hire?</div>
+        <div class="chip" onclick="fireChip(this)">Her certifications?</div>
+        <div class="chip" onclick="fireChip(this)">What domains has she worked in?</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Input -->
+  <div class="input-area">
+    <div class="input-wrap">
+      <span class="input-prefix">JARVIS &rsaquo;</span>
+      <input type="text" id="jarvisInput" placeholder="Ask me anything about Snehal..." autocomplete="off"
+             onkeydown="if(event.key==='Enter' && !event.shiftKey){ event.preventDefault(); handleSend(); }"/>
+      <button class="send-btn" id="sendBtn" onclick="handleSend()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+      </button>
+    </div>
+    <div class="input-hint">JARVIS has full knowledge of Snehal's portfolio · Powered by Claude AI</div>
+  </div>
+
+<script>
+// ─── KNOWLEDGE BASE (offline fallback) ───────────────────────────────────────
+const KB = {
+  name: "Snehal Mastud",
+  title: "Full-Stack Engineer & AI Practitioner",
+  experience: "5+ years",
+  location: "Mumbai, India",
+  email: "smastud0@gmail.com",
+  linkedin: "https://www.linkedin.com/in/snehal-m-23a64716b/",
+  github: "https://github.com/snehalmastud",
+  instagram: "https://www.instagram.com/snehalmastud",
+  company: "Vernost Tech Ventures Pvt. Ltd.",
+  tenure: "2020 – Present",
+  education: "BE Computer Engineering, SMT. Indira Gandhi College of Engineering, Navi Mumbai (2016–2020)",
+  certification: "Agentic AI — Coursera (Verified) | https://www.coursera.org/account/accomplishments/verify/E7F2MHAH1GH0",
+  backend: ["Node.js", "Express.js", "JavaScript", "JWT", "REST APIs", "Microservices"],
+  frontend: ["React.js", "Angular", "Next.js", "TypeScript", "HTML", "CSS"],
+  databases: ["MongoDB", "MySQL", "Redis", "SQL Server"],
+  cloud: ["AWS EC2/S3/Lambda", "GCP", "Docker", "Kubernetes", "Jenkins", "CI/CD", "SonarQube"],
+  ai_tools: ["Claude (Anthropic)", "GitHub Copilot", "ChatGPT", "Emergent", "Kiro"],
+  projects: [
+    { name:"Axis GrabDeals", domain:"Fintech · Loyalty", desc:"Axis Bank loyalty platform with 10+ third-party integrations (Flipkart, Amazon, Puma)", stack:"Angular, MySQL, Node.js, Express.js" },
+    { name:"My Way Miles Platform", domain:"Aviation · Exchange", desc:"First-of-its-kind air miles exchange system; 15+ airline partners (Qatar Airways, Saudia, Ascenda); 67% downtime reduction", stack:"Angular, MongoDB, Node.js, Express.js" },
+    { name:"Reporting Microservices", domain:"Performance", desc:"8 microservices for data reporting, reducing API runtime by 30–70% via MySQL indexing", stack:"Node.js, Express.js, MySQL, Angular" },
+    { name:"Travel Platform", domain:"Travel", desc:"Backend APIs + frontend for Bluesky & MakeMyTrip covering Flights, Hotels, Holiday Packages", stack:"Angular, MySQL, Node.js, EJS" },
+    { name:"Corefit Platform", domain:"Healthcare · Streaming", desc:"Real-time streaming platform for live messaging and video conferencing", stack:"Angular, MySQL, Node.js, Express.js" },
+    { name:"Club by IIFA App", domain:"Entertainment", desc:"Celebrity fan engagement app; also leading IIFA Affiliate backend", stack:"MongoDB, Node.js" }
+  ]
+};
+
+// ─── CONVERSATION HISTORY ────────────────────────────────────────────────────
+let history = [];
+let isBusy = false;
+
+// ─── SYSTEM PROMPT ───────────────────────────────────────────────────────────
+const SYSTEM = `You are "Jarvis" — Snehal Mastud's witty, sharp, and professional AI portfolio assistant. You speak like Tony Stark's Jarvis: confident, helpful, slightly dry-humored, always precise. Use "she/her" pronouns for Snehal.
+
+Respond in 2–5 sentences max. Be conversational and engaging. Use markdown sparingly (bold for key terms is fine). No bullet lists unless specifically asked.
+
+FULL KNOWLEDGE BASE:
+Name: Snehal Mastud | Female | Mumbai, India
+Role: Full-Stack Engineer & AI Practitioner | 5+ years
+Company: Vernost Tech Ventures Pvt. Ltd. (2020–Present)
+Email: smastud0@gmail.com
+LinkedIn: https://www.linkedin.com/in/snehal-m-23a64716b/
+GitHub: https://github.com/snehalmastud
+Instagram: https://www.instagram.com/snehalmastud
+
+SKILLS:
+- Backend: Node.js, Express.js, JavaScript, JWT, REST APIs, Microservices
+- Frontend: React.js, Angular, Next.js, TypeScript, HTML/CSS
+- Databases: MongoDB, MySQL, Redis, SQL Server, Indexing, Caching
+- Cloud/DevOps: AWS (EC2, S3, Lambda), GCP, Docker, Kubernetes, Jenkins, CI/CD, SonarQube
+- AI Tools: Claude, GitHub Copilot, ChatGPT, Emergent, Kiro, Prompt Engineering
+
+CERTIFICATION: Agentic AI — Coursera (Verified) → https://www.coursera.org/account/accomplishments/verify/E7F2MHAH1GH0
+
+PROJECTS:
+1. Axis GrabDeals — Axis Bank loyalty platform; 10+ API integrations (Flipkart, Amazon, Puma). Stack: Angular, MySQL, Node.js
+2. My Way Miles — Air miles exchange; 15+ airlines (Qatar, Saudia, Ascenda); 67% downtime cut. Stack: Angular, MongoDB, Node.js
+3. Reporting Microservices — 8 services; 30–70% faster APIs via MySQL indexing. Stack: Node.js, MySQL
+4. Travel Platform — Bluesky & MakeMyTrip; Flights/Hotels/Holidays. Stack: Angular, Node.js, EJS
+5. Corefit — Live streaming & messaging platform. Stack: Angular, Node.js
+6. Club by IIFA App — Fan engagement + affiliate platform. Stack: MongoDB, Node.js
+
+EDUCATION: BE Computer Engineering, SMT. Indira Gandhi College of Engineering, Navi Mumbai (2016–2020)
+DOMAINS: Fintech, Aviation, Healthcare, E-commerce
+AVAILABILITY: Open to full-stack / AI-integrated engineering roles. Open to remote.
+SALARY: Open to discussion based on role.
+
+If asked about personal topics not in this data, politely redirect to smastud0@gmail.com.`;
+
+// ─── UI HELPERS ──────────────────────────────────────────────────────────────
+function hideWelcome() {
+  const w = document.getElementById('welcomeScreen');
+  if (w) { w.style.animation = 'fadeOut 0.25s ease forwards'; setTimeout(()=>w.remove(), 250); }
+}
+
+function appendMsg(text, role, stream=false) {
+  const area = document.getElementById('messagesArea');
+  const row = document.createElement('div');
+  row.className = `msg-row ${role === 'user' ? 'user' : 'bot'}`;
+
+  const av = document.createElement('div');
+  av.className = `msg-avatar ${role === 'user' ? 'user-av' : 'jarvis'}`;
+  av.textContent = role === 'user' ? 'YOU' : 'J';
+
+  const bub = document.createElement('div');
+  bub.className = 'msg-bubble';
+
+  const inner = document.createElement('span');
+  inner.className = 'msg-text';
+  bub.appendChild(inner);
+
+  if (stream) {
+    const cur = document.createElement('span');
+    cur.className = 'stream-cursor';
+    bub.appendChild(cur);
+    row._cursor = cur;
+    row._inner = inner;
+  } else {
+    inner.innerHTML = mdToHtml(text);
+  }
+
+  if (role === 'bot') {
+    const meta = document.createElement('div');
+    meta.className = 'msg-meta';
+    meta.textContent = 'JARVIS · SNEHAL\'S AI';
+    bub.appendChild(meta);
+  }
+
+  row.appendChild(av);
+  row.appendChild(bub);
+  area.appendChild(row);
+  area.scrollTop = area.scrollHeight;
+  return row;
+}
+
+function showTyping() {
+  const area = document.getElementById('messagesArea');
+  const row = document.createElement('div');
+  row.className = 'msg-row bot'; row.id = 'typingRow';
+  const av = document.createElement('div');
+  av.className = 'msg-avatar jarvis'; av.textContent = 'J';
+  const dots = document.createElement('div');
+  dots.className = 'typing-dots';
+  dots.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+  row.appendChild(av); row.appendChild(dots);
+  area.appendChild(row);
+  area.scrollTop = area.scrollHeight;
+}
+
+function removeTyping() {
+  const el = document.getElementById('typingRow');
+  if (el) el.remove();
+}
+
+function addSuggestions(suggestions) {
+  const area = document.getElementById('messagesArea');
+  const row = document.createElement('div');
+  row.className = 'suggestion-row';
+  suggestions.forEach(s => {
+    const btn = document.createElement('button');
+    btn.className = 'sug-btn';
+    btn.textContent = s;
+    btn.onclick = () => { row.remove(); document.getElementById('jarvisInput').value = s; handleSend(); };
+    row.appendChild(btn);
+  });
+  area.appendChild(row);
+  area.scrollTop = area.scrollHeight;
+}
+
+// Simple markdown: **bold**, \n to <br>
+function mdToHtml(text) {
+  return text
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g,'<em>$1</em>')
+    .replace(/\n/g,'<br>');
+}
+
+// ─── SEND HANDLER ────────────────────────────────────────────────────────────
+async function handleSend() {
+  if (isBusy) return;
+  const input = document.getElementById('jarvisInput');
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  input.value = '';
+  hideWelcome();
+  isBusy = true;
+  document.getElementById('sendBtn').disabled = true;
+
+  appendMsg(msg, 'user');
+  history.push({ role:'user', content: msg });
+
+  showTyping();
+
+  // Try live API first
+  let reply = null;
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json' },
+      body: JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:600,
+        system: SYSTEM,
+        messages: history
+      })
+    });
+    const data = await res.json();
+    if (data?.content?.[0]?.text) {
+      reply = data.content[0].text;
+    }
+  } catch(e) {}
+
+  // Fallback to local KB
+  if (!reply) { reply = localAnswer(msg); }
+
+  removeTyping();
+
+  // Stream the reply character-by-character
+  const msgRow = appendMsg('', 'bot', true);
+  history.push({ role:'assistant', content: reply });
+  await streamText(msgRow, reply);
+
+  // Follow-up suggestions
+  const sugs = getFollowUps(msg);
+  if (sugs.length) addSuggestions(sugs);
+
+  isBusy = false;
+  document.getElementById('sendBtn').disabled = false;
+  document.getElementById('jarvisInput').focus();
+}
+
+async function streamText(row, text) {
+  const inner = row._inner;
+  const cursor = row._cursor;
+  let displayed = '';
+  for (let i = 0; i < text.length; i++) {
+    displayed += text[i];
+    inner.innerHTML = mdToHtml(displayed);
+    document.getElementById('messagesArea').scrollTop = 99999;
+    await delay(text.length > 300 ? 8 : 14);
+  }
+  if (cursor) cursor.remove();
+}
+
+function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+function fireChip(el) {
+  document.getElementById('jarvisInput').value = el.textContent;
+  handleSend();
+}
+
+// ─── LOCAL KNOWLEDGE FALLBACK ─────────────────────────────────────────────────
+function localAnswer(q) {
+  q = q.toLowerCase();
+
+  if (/project|work|built|made|developed|portfolio/.test(q)) {
+    return `Snehal has delivered 6 major projects across fintech, aviation, healthcare, and e-commerce. Her flagship work includes **Axis GrabDeals** (Axis Bank loyalty platform with 10+ API integrations), **My Way Miles** (air miles exchange with 15+ airline partners, 67% downtime reduction), and **Reporting Microservices** that slashed API response times by 30–70%. Each project reflects full-stack ownership from backend APIs to frontend UI.`;
+  }
+  if (/ai|artificial|jarvis|copilot|chatgpt|claude|emergent|kiro|agentic/.test(q)) {
+    return `Snehal is an active AI practitioner — she works daily with **Claude (Anthropic)**, GitHub Copilot, ChatGPT, Emergent, and Kiro to accelerate her engineering workflow. She's also **certified in Agentic AI** through Coursera (verified: coursera.org/account/accomplishments/verify/E7F2MHAH1GH0), covering autonomous agents, tool use, and multi-step AI reasoning.`;
+  }
+  if (/certif|course|credential/.test(q)) {
+    return `Snehal holds a verified **Agentic AI certification from Coursera**, covering autonomous agents, multi-step reasoning, tool use, and building real-world agentic workflows. You can verify it at: coursera.org/account/accomplishments/verify/E7F2MHAH1GH0`;
+  }
+  if (/skill|tech|stack|language|framework|tool/.test(q)) {
+    return `Snehal's stack spans the full spectrum — **backend** in Node.js / Express.js / Microservices, **frontend** in Angular / React / Next.js, **databases** including MongoDB, MySQL, and Redis, and **cloud/DevOps** with AWS, Docker, Kubernetes, and CI/CD. She also actively uses AI tooling: Claude, GitHub Copilot, ChatGPT, Emergent, and Kiro.`;
+  }
+  if (/backend|node|express|microservice/.test(q)) {
+    return `On the backend, Snehal is expert-level in **Node.js and Express.js**, building RESTful APIs, microservices architectures, and high-performance systems. She designed and deployed 8 reporting microservices that reduced API runtime by 30–70% through MySQL indexing and performance tuning.`;
+  }
+  if (/frontend|react|angular|next|ui/.test(q)) {
+    return `Snehal is equally strong on the frontend — she's built production UIs with **Angular, React.js, and Next.js**, using TypeScript throughout. She doesn't just hand off designs; she owns the full user-facing experience end-to-end.`;
+  }
+  if (/database|mongo|mysql|redis|sql/.test(q)) {
+    return `Her database expertise covers both SQL and NoSQL: **MongoDB, MySQL, Redis, and SQL Server**. She's particularly skilled in performance optimization — her indexing and query tuning work cut API response times by up to 70% in production.`;
+  }
+  if (/cloud|aws|docker|kubernetes|devops|ci|cd/.test(q)) {
+    return `Snehal is cloud-native: she works with **AWS (EC2, S3, Lambda)**, GCP, Docker, Kubernetes, Jenkins, and CI/CD pipelines. She's deployed and scaled distributed microservices in production environments.`;
+  }
+  if (/hire|available|opportunit|job|open|remote|work/.test(q)) {
+    return `Yes! Snehal is currently **open to new opportunities** — full-stack engineering roles or positions involving AI-integrated development. She's based in Mumbai but open to remote work. You can reach her at smastud0@gmail.com or via LinkedIn.`;
+  }
+  if (/contact|email|reach|linkedin|github|instagram|social/.test(q)) {
+    return `Best ways to reach Snehal:\n📧 smastud0@gmail.com\n💼 linkedin.com/in/snehal-m-23a64716b\n🐙 github.com/snehalmastud\n📸 instagram.com/snehalmastud`;
+  }
+  if (/education|degree|college|university|study|engineer/.test(q)) {
+    return `Snehal holds a **BE in Computer Engineering** from SMT. Indira Gandhi College of Engineering, Navi Mumbai (2016–2020). That foundation in systems, data structures, and architecture underpins everything she builds today.`;
+  }
+  if (/company|vernost|experience|year|work/.test(q)) {
+    return `Snehal has been at **Vernost Tech Ventures Pvt. Ltd.** since 2020 — over 5 years as a Full-Stack Software Engineer in Mumbai. She's led backend architecture, managed teams, and delivered platforms spanning fintech, aviation, healthcare, and e-commerce.`;
+  }
+  if (/domain|industry|fintech|bank|aviation|health|ecommerce/.test(q)) {
+    return `Snehal has delivered production systems across **4 key domains**: fintech (Axis Bank loyalty), aviation (airline miles exchange with 15+ global partners), healthcare (real-time streaming/wellness platform), and e-commerce (loyalty & affiliate platforms).`;
+  }
+  if (/who|about|snehal|tell me/.test(q)) {
+    return `Snehal Mastud is a **Full-Stack Engineer & AI Practitioner** with 5+ years of experience based in Mumbai, India. She owns the full engineering stack — from Node.js backends to Angular/React frontends — and integrates AI tools like Claude and GitHub Copilot into her daily workflow. She's certified in Agentic AI and currently open to new opportunities.`;
+  }
+  if (/soft skill|leadership|team|communicat/.test(q)) {
+    return `Beyond technical skills, Snehal is known for **leadership and mentorship**, cross-functional communication, and agile team collaboration. She's co-led and directed full engineering teams, taking projects from architecture through to production launch.`;
+  }
+  // Default
+  return `Great question! Based on what I know about Snehal: she's a **Full-Stack Engineer & AI Practitioner** with 5+ years, expert in MEAN/MERN stacks and AI tooling, currently open to opportunities. For anything more specific, she'd love to hear from you directly at smastud0@gmail.com — or try asking me something more specific about her skills, projects, or experience!`;
+}
+
+// ─── FOLLOW-UP SUGGESTIONS ───────────────────────────────────────────────────
+function getFollowUps(q) {
+  q = q.toLowerCase();
+  if (/project/.test(q)) return ["Which project had the most impact?", "What stack does she prefer?", "Is she open to hire?"];
+  if (/ai|agentic|certif/.test(q)) return ["What AI tools does she use daily?", "Tell me about her tech stack", "Her availability?"];
+  if (/hire|available|job/.test(q)) return ["How to contact her?", "What roles is she looking for?", "Her top skills?"];
+  if (/skill|stack|tech/.test(q)) return ["Tell me about her projects", "Her cloud experience?", "What AI tools?"];
+  if (/contact/.test(q)) return ["What's her experience?", "Tell me her projects", "What makes her unique?"];
+  return ["Her top projects?", "What AI tools does she use?", "Is she available to hire?"];
+}
+
+// ─── CSS FADE OUT ─────────────────────────────────────────────────────────────
+const style = document.createElement('style');
+style.textContent = '@keyframes fadeOut { to{opacity:0;transform:translateY(-10px)} }';
+document.head.appendChild(style);
+</script>
+</body>
+</html>

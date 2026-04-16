@@ -22,7 +22,7 @@
       <li><a href="#projects">Projects</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
-    <button class="chat-nav-btn" onclick="openChat()">💬 Ask Me</button>
+    <button class="chat-nav-btn" onclick="window.open('jarvis.html','_blank')">🤖 Ask Snehal's Jarvis</button>
   </nav>
 
   <!-- Hero -->
@@ -355,7 +355,7 @@
           <div class="contact-card">
             <p class="contact-card-title">Quick Chat with my AI</p>
             <p>Want to know more about my skills, projects, or availability? Ask my AI assistant directly.</p>
-            <button class="btn-primary" onclick="openChat()">💬 Open AI Chat</button>
+            <button class="btn-primary" onclick="window.open('jarvis.html','_blank')">🤖 Open Jarvis</button>
           </div>
         </div>
       </div>
@@ -374,37 +374,9 @@
   </footer>
 
   <!-- CHATBOT -->
-  <div class="chat-bubble" id="chatBubble" onclick="openChat()">
-    <span class="chat-bubble-icon">💬</span>
-    <span class="chat-bubble-label">Ask about Snehal</span>
-  </div>
-
-  <div class="chat-overlay" id="chatOverlay" onclick="closeChat()"></div>
-
-  <div class="chat-panel" id="chatPanel">
-    <div class="chat-header">
-      <div class="chat-avatar">SM</div>
-      <div class="chat-header-info">
-        <strong>Snehal's AI Assistant</strong>
-        <span class="online-dot"></span> Online
-      </div>
-      <button class="chat-close" onclick="closeChat()">✕</button>
-    </div>
-    <div class="chat-messages" id="chatMessages">
-      <div class="chat-msg bot">
-        <div class="msg-bubble">👋 Hi! I'm Snehal's AI assistant. Ask me anything about her skills, projects, experience, or availability!</div>
-      </div>
-      <div class="chat-suggestions">
-        <button onclick="askSuggestion(this)">What's her full-stack experience?</button>
-        <button onclick="askSuggestion(this)">Tell me about her AI skills</button>
-        <button onclick="askSuggestion(this)">Is she available to hire?</button>
-        <button onclick="askSuggestion(this)">Show me her projects</button>
-      </div>
-    </div>
-    <div class="chat-input-row">
-      <input type="text" id="chatInput" placeholder="Ask anything about Snehal..." onkeydown="if(event.key==='Enter') sendMessage()" />
-      <button onclick="sendMessage()" id="sendBtn">➤</button>
-    </div>
+  <div class="chat-bubble" id="chatBubble" onclick="window.open('jarvis.html','_blank')">
+    <span class="chat-bubble-icon">🤖</span>
+    <span class="chat-bubble-label">Ask Snehal's Jarvis</span>
   </div>
 
   <script src="script.js"></script>
