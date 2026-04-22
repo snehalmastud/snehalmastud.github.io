@@ -419,6 +419,11 @@ PROJECTS:
 5. Corefit — Live streaming & messaging platform. Stack: Angular, Node.js
 6. Club by IIFA App — Fan engagement + affiliate platform. Stack: MongoDB, Node.js
 
+SELF-BUILT PERSONAL PROJECTS (live on GitHub Pages — built independently from scratch):
+1. NexChat — https://snehalmastud.github.io/chatapp/ — WhatsApp-style chat app with user registration, profiles, real messaging, and a built-in Claude AI chatbot. Stack: HTML/CSS/JS, localStorage, GitHub Pages.
+2. Portfolio Generator — https://snehalmastud.github.io/portfolio-generator/ — A guided 5-step tool that lets anyone create a personalised portfolio website and download it as a ZIP. Includes live preview, theme/font selection, no-code required.
+3. ObjectEye (Object Detector) — https://snehalmastud.github.io/object-detector/ — Real-time AI object detection in the browser using the device camera, TensorFlow.js, and COCO-SSD model. Tracks FPS, confidence scores, supports voice announcements and camera switching.
+
 EDUCATION: BE Computer Engineering, SMT. Indira Gandhi College of Engineering, Navi Mumbai (2016–2020)
 DOMAINS: Fintech, Aviation, Healthcare, E-commerce
 AVAILABILITY: Open to full-stack / AI-integrated engineering roles. Open to remote.
@@ -595,7 +600,19 @@ function localAnswer(q) {
   q = q.toLowerCase();
 
   if (/project|work|built|made|developed|portfolio/.test(q)) {
-    return `Snehal has delivered 6 major projects across fintech, aviation, healthcare, and e-commerce. Her flagship work includes **Axis GrabDeals** (Axis Bank loyalty platform with 10+ API integrations), **My Way Miles** (air miles exchange with 15+ airline partners, 67% downtime reduction), and **Reporting Microservices** that slashed API response times by 30–70%. Each project reflects full-stack ownership from backend APIs to frontend UI.`;
+    return `Snehal has delivered 6 major professional projects **plus 3 self-built personal projects** live on GitHub Pages. Professionally: Axis GrabDeals, My Way Miles, Reporting Microservices, Travel Platform, Corefit, and Club by IIFA. Personally: **NexChat** (chat app with AI), **Portfolio Generator** (no-code portfolio builder), and **ObjectEye** (real-time AI object detection). She owns the full stack end-to-end.`;
+  }
+  if (/nexchat|chat app/.test(q)) {
+    return `NexChat is Snehal's self-built WhatsApp-style chat app — live at snehalmastud.github.io/chatapp. It features user registration, real messaging, profile customisation, and a built-in Claude AI chatbot. Built entirely with HTML, CSS, JavaScript, and localStorage. 💬`;
+  }
+  if (/portfolio.gen|portfolio generator/.test(q)) {
+    return `Snehal built a Portfolio Generator — live at snehalmastud.github.io/portfolio-generator. It's a 5-step guided tool that lets anyone create a personalised portfolio site without coding, with live preview and downloadable ZIP export. 🎨`;
+  }
+  if (/object.detect|objecteye|tensorflow|coco/.test(q)) {
+    return `ObjectEye is Snehal's real-time AI object detector — live at snehalmastud.github.io/object-detector. It uses TensorFlow.js and COCO-SSD to detect and label objects through your device camera in real time, tracking FPS, confidence, and unique object types. Supports voice announcements too. 👁️`;
+  }
+  if (/self.built|personal project|github.page|side project|own project/.test(q)) {
+    return `Snehal has 3 self-built projects live on GitHub Pages: **NexChat** (chat app + AI chatbot), **Portfolio Generator** (5-step no-code portfolio builder), and **ObjectEye** (real-time AI object detection with TensorFlow.js). All three are fully functional and publicly accessible. 🚀`;
   }
   if (/ai|artificial|jarvis|copilot|chatgpt|claude|emergent|kiro|agentic/.test(q)) {
     return `Snehal is an active AI practitioner — she works daily with **Claude (Anthropic)**, GitHub Copilot, ChatGPT, Emergent, and Kiro to accelerate her engineering workflow. She's also **certified in Agentic AI** through Coursera (verified: coursera.org/account/accomplishments/verify/E7F2MHAH1GH0), covering autonomous agents, tool use, and multi-step AI reasoning.`;
