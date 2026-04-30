@@ -82,8 +82,6 @@ const terminalCode = `const engineer = {
     cloud: ["AWS", "Docker", "Kubernetes"],
   },
 
-  os: ["macOS", "Linux (Ubuntu)", "Windows"],
-
   domains: [
     "Fintech", "Aviation",
     "Healthcare", "E-commerce"
@@ -179,7 +177,6 @@ TECHNICAL SKILLS:
 - Cloud & DevOps: AWS (EC2, S3, Lambda), GCP, Docker, Kubernetes, Jenkins, CI/CD, SonarQube
 - AI Tools: Claude (Anthropic), GitHub Copilot, ChatGPT, Emergent, Kiro
 - Other: Agile, Git, Jira, Data Modeling, Problem Solving, Team Leadership, Prompt Engineering
-- Operating Systems: macOS, Linux (Ubuntu), Windows
 
 CERTIFICATIONS:
 - Agentic AI — Coursera (Verified): https://www.coursera.org/account/accomplishments/verify/E7F2MHAH1GH0
@@ -245,4 +242,19 @@ function showTyping() {
 function removeTyping() {
   const el = document.getElementById('typingIndicator');
   if (el) el.remove();
+}
+
+// ─── SELF-BUILT PROJECT FILTER ───────────────────────────────────────────────
+function filterSB(cat, btn) {
+  document.querySelectorAll('.sb-filter').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('#sbGrid .sb-card').forEach(card => {
+    const c = card.dataset.cat;
+    if (cat === 'all' || c === cat) {
+      card.style.display = '';
+      card.style.animation = 'sbFadeIn 0.4s ease forwards';
+    } else {
+      card.style.display = 'none';
+    }
+  });
 }

@@ -330,11 +330,11 @@
       <div class="welcome-desc">Ask me anything about Snehal — her skills, projects, experience, AI expertise, certifications, or how to reach her.</div>
       <div class="welcome-chips" id="welcomeChips">
         <div class="chip" onclick="fireChip(this)">What's her tech stack?</div>
-        <div class="chip" onclick="fireChip(this)">Tell me about her projects</div>
+        <div class="chip" onclick="fireChip(this)">Tell me about her self-built projects</div>
         <div class="chip" onclick="fireChip(this)">What AI tools does she use?</div>
         <div class="chip" onclick="fireChip(this)">Is she open to hire?</div>
+        <div class="chip" onclick="fireChip(this)">Tell me about the WhatsApp bot</div>
         <div class="chip" onclick="fireChip(this)">Her certifications?</div>
-        <div class="chip" onclick="fireChip(this)">What domains has she worked in?</div>
       </div>
     </div>
   </div>
@@ -407,7 +407,7 @@ SKILLS:
 - Frontend: React.js, Angular, Next.js, TypeScript, HTML/CSS
 - Databases: MongoDB, MySQL, Redis, SQL Server, Indexing, Caching
 - Cloud/DevOps: AWS (EC2, S3, Lambda), GCP, Docker, Kubernetes, Jenkins, CI/CD, SonarQube
-- AI Tools: Claude, GitHub Copilot, ChatGPT, Emergent, Kiro, Prompt Engineering
+- AI Tools: Claude (Anthropic), Claude Codex, GitHub Copilot, Cursor, ChatGPT, Emergent, Kiro, Prompt Engineering
 
 CERTIFICATION: Agentic AI — Coursera (Verified) → https://www.coursera.org/account/accomplishments/verify/E7F2MHAH1GH0
 
@@ -423,6 +423,14 @@ SELF-BUILT PERSONAL PROJECTS (live on GitHub Pages — built independently from 
 1. NexChat — https://snehalmastud.github.io/chatapp/ — WhatsApp-style chat app with user registration, profiles, real messaging, and a built-in Claude AI chatbot. Stack: HTML/CSS/JS, localStorage, GitHub Pages.
 2. Portfolio Generator — https://snehalmastud.github.io/portfolio-generator/ — A guided 5-step tool that lets anyone create a personalised portfolio website and download it as a ZIP. Includes live preview, theme/font selection, no-code required.
 3. ObjectEye (Object Detector) — https://snehalmastud.github.io/object-detector/ — Real-time AI object detection in the browser using the device camera, TensorFlow.js, and COCO-SSD model. Tracks FPS, confidence scores, supports voice announcements and camera switching.
+4. WhatsApp Auto-Reply — https://github.com/snehalmastud/whatsapp-autoreply — Built because Snehal was missing messages from her parents during intense work. A Node.js bot that auto-replies to configured WhatsApp contacts with keyword-based smart replies, PM2 session management.
+5. ResumeForge (Resume Builder) — https://snehalmastud.github.io/resume-builder/ — Browser-based ATS-optimised resume builder with live preview, custom sections, and 4 export formats: PDF, DOCX, plain-text ATS, and JSON save/restore. No signup required.
+6. Potterhead — https://snehalmastud.github.io/potterhead/ — A fully interactive Harry Potter fan site with 8 films, all 7 books, an accessories shop with category filters (wands, clothing, collectibles), animated house crests, and smooth CSS animations.
+
+DEVICES & OS EXPERIENCE:
+Mobile: Android (development & testing), iOS (iPhone/iPad testing), Google Pixel (primary/daily driver device)
+Desktop/Laptop: macOS (primary dev environment), Windows (testing & cross-platform), Microsoft Surface (hybrid laptop)
+She builds and tests across all these platforms to ensure responsive, accessible experiences on every screen size and OS.
 
 EDUCATION: BE Computer Engineering, SMT. Indira Gandhi College of Engineering, Navi Mumbai (2016–2020)
 DOMAINS: Fintech, Aviation, Healthcare, E-commerce
@@ -600,7 +608,7 @@ function localAnswer(q) {
   q = q.toLowerCase();
 
   if (/project|work|built|made|developed|portfolio/.test(q)) {
-    return `Snehal has delivered 6 major professional projects **plus 3 self-built personal projects** live on GitHub Pages. Professionally: Axis GrabDeals, My Way Miles, Reporting Microservices, Travel Platform, Corefit, and Club by IIFA. Personally: **NexChat** (chat app with AI), **Portfolio Generator** (no-code portfolio builder), and **ObjectEye** (real-time AI object detection). She owns the full stack end-to-end.`;
+    return `Snehal has delivered 6 major professional projects **plus 6 self-built personal projects**. Professionally: Axis GrabDeals, My Way Miles, Reporting Microservices, Travel Platform, Corefit, and Club by IIFA. Personally: **NexChat** (chat app + AI), **Portfolio Generator**, **ObjectEye** (AI camera), **WhatsApp Auto-Reply** (built for her parents!), **Resume Builder**, and **Potterhead**. She owns every layer of the stack.`;
   }
   if (/nexchat|chat app/.test(q)) {
     return `NexChat is Snehal's self-built WhatsApp-style chat app — live at snehalmastud.github.io/chatapp. It features user registration, real messaging, profile customisation, and a built-in Claude AI chatbot. Built entirely with HTML, CSS, JavaScript, and localStorage. 💬`;
@@ -611,8 +619,26 @@ function localAnswer(q) {
   if (/object.detect|objecteye|tensorflow|coco/.test(q)) {
     return `ObjectEye is Snehal's real-time AI object detector — live at snehalmastud.github.io/object-detector. It uses TensorFlow.js and COCO-SSD to detect and label objects through your device camera in real time, tracking FPS, confidence, and unique object types. Supports voice announcements too. 👁️`;
   }
+  if (/whatsapp|autoreply|auto.reply|parents|family/.test(q)) {
+    return `This one is personal 💚 — Snehal was missing messages from her parents while heads-down at work, so she built a WhatsApp Auto-Reply bot in Node.js. It auto-replies to configured contacts with smart keyword-based responses, supports groups, and runs persistently via PM2. github.com/snehalmastud/whatsapp-autoreply`;
+  }
+  if (/device|mobile|android|ios|iphone|pixel|google pixel|macos|mac os|windows|microsoft|surface|laptop|cross.platform|platform/.test(q)) {
+    return `Snehal is comfortable working across the full device spectrum 📱💻 — on mobile she uses Android, iOS, and her Google Pixel as her daily driver. On the desktop/laptop side she works in macOS as her primary dev environment, with Windows and Microsoft Surface for cross-platform testing. She always ensures her builds are responsive and accessible across every screen size and OS.`;
+  }
+  if (/resumeforge|resume.builder|resume builder|resumeforge/.test(q)) {
+    return `ResumeForge is Snehal's fully browser-based ATS-optimised resume builder — live at snehalmastud.github.io/resume-builder. It features live preview, custom sections, and 4 export formats: PDF, Word (DOCX), plain-text ATS, and JSON save/restore. No backend, no signup needed. 📄`;
+  }
+  if (/potter|potterhead|harry/.test(q)) {
+    return `Potterhead is Snehal's passion project — live at snehalmastud.github.io/potterhead. It's a fully interactive Harry Potter fan site covering all 8 films, all 7 books, and a shop with category filters. Built with pure vanilla JS and rich CSS animations. ⚡`;
+  }
   if (/self.built|personal project|github.page|side project|own project/.test(q)) {
-    return `Snehal has 3 self-built projects live on GitHub Pages: **NexChat** (chat app + AI chatbot), **Portfolio Generator** (5-step no-code portfolio builder), and **ObjectEye** (real-time AI object detection with TensorFlow.js). All three are fully functional and publicly accessible. 🚀`;
+    return `Snehal has 6 self-built projects: **NexChat** (chat + AI), **Portfolio Generator** (no-code builder), **ObjectEye** (TensorFlow.js camera AI), **WhatsApp Auto-Reply** (built for family messaging), **Resume Builder** (ATS-ready output), and **Potterhead** (Harry Potter fan site). Each one solves a real problem or passion. 🚀`;
+  }
+  if (/cursor|claude codex|codex/.test(q)) {
+    return `Yes! Alongside Claude and GitHub Copilot, Snehal actively uses **Claude Codex** and **Cursor** — the AI-native code editor — as part of her daily engineering workflow. She's one of the early adopters integrating these into real production work. 🤖`;
+  }
+  if (/ai tool|copilot|claude|emergent|kiro|chatgpt/.test(q)) {
+    return `Snehal actively uses **Claude (Anthropic), Claude Codex, GitHub Copilot, Cursor, ChatGPT, Emergent, and Kiro** in her day-to-day engineering. She's certified in Agentic AI (97% — Coursera) and uses these tools for everything from code generation to architecture decisions. 🤖`;
   }
   if (/ai|artificial|jarvis|copilot|chatgpt|claude|emergent|kiro|agentic/.test(q)) {
     return `Snehal is an active AI practitioner — she works daily with **Claude (Anthropic)**, GitHub Copilot, ChatGPT, Emergent, and Kiro to accelerate her engineering workflow. She's also **certified in Agentic AI** through Coursera (verified: coursera.org/account/accomplishments/verify/E7F2MHAH1GH0), covering autonomous agents, tool use, and multi-step AI reasoning.`;
